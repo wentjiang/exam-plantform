@@ -1,0 +1,11 @@
+@startuml
+actor Teacher
+Teacher -> BlankQuizController : POST /BlankQuiz
+BlankQuizController -> BlankQuizController: create()
+BlankQuizController -> BlankQuizApplicationService : createBlankQuiz()
+BlankQuizApplicationService -> BlankQuiz : create()
+BlankQuizApplicationService -> BlankQuizRepository: addBlankQuiz()
+database blankQuizSet
+
+
+@enduml
