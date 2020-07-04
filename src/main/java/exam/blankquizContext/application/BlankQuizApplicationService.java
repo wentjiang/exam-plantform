@@ -14,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class BlankQuizApplicationService {
 
-    @Autowired
-    private BlankQuizRepository blankQuizRepository;
+    private final BlankQuizRepository blankQuizRepository;
 
+    public BlankQuizApplicationService(BlankQuizRepository blankQuizRepository) {
+        this.blankQuizRepository = blankQuizRepository;
+    }
 
     public List<BlankQuizDTO> getAll() {
         return blankQuizRepository.getAll().parallelStream().map(blankQuiz -> {
@@ -52,8 +54,11 @@ public class BlankQuizApplicationService {
         return null;
     }
 
-    public BlankQuizDTO updateBlankQuiz(UpdateBlankQuizCommand command) {
-        BlankQuiz blankQuiz = blankQuizRepository.updateBlankQuiz(command);
+    public BlankQuizDTO reviseBlankQuiz(UpdateBlankQuizCommand command, BlankQuizId id) {
+        BlankQuiz blankQuiz = blankQuizRepository.getById(id);
+        blankQuiz.revise(command.getTeacherId(), command.getContent(),
+                command.getReferenceAnswer(), command.getScore());
+        blankQuiz = blankQuizRepository.save(blankQuiz);
         if (blankQuiz != null) {
             BlankQuizDTO dto = new BlankQuizDTO();
             BeanUtils.copyProperties(blankQuiz, dto);

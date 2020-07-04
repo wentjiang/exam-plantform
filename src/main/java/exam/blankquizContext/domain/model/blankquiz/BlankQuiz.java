@@ -8,7 +8,9 @@ import lombok.Getter;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+@Getter
 @EqualsAndHashCode(of = {"blankQuizId"})
 public class BlankQuiz implements Entity<BlankQuiz> {
     @Getter
@@ -26,6 +28,7 @@ public class BlankQuiz implements Entity<BlankQuiz> {
     }
 
     private BlankQuiz(String teacherId, String content, String referenceAnswer, int score) {
+        this.blankQuizId = new BlankQuizId(UUID.randomUUID().toString());
         this.teacherId = teacherId;
         this.content = content;
         this.referenceAnswer = referenceAnswer;
@@ -50,9 +53,5 @@ public class BlankQuiz implements Entity<BlankQuiz> {
         if (score != 0){
             this.score = score;
         }
-    }
-
-    public void delete(){
-        //todo
     }
 }

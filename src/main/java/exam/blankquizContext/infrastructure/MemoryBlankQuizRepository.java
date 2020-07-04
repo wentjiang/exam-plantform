@@ -23,14 +23,6 @@ public class MemoryBlankQuizRepository implements BlankQuizRepository {
     }
 
     @Override
-    public BlankQuiz updateBlankQuiz(UpdateBlankQuizCommand command) {
-        BlankQuiz blankQuiz = getById(command.getBlankQuizId());
-        blankQuiz.revise(command.getTeacherId(),command.getContent(),command.getReferenceAnswer(),
-                command.getScore());
-        return blankQuiz;
-    }
-
-    @Override
     public void deleteBlankQuiz(BlankQuizId id) {
         BlankQuiz deleteBlankQuiz = getById(id);
         if (deleteBlankQuiz != null) {
@@ -47,5 +39,11 @@ public class MemoryBlankQuizRepository implements BlankQuizRepository {
     public BlankQuiz getById(BlankQuizId blankQuizId) {
        return blankQuizSet.stream().filter(blankQuiz -> blankQuiz.getBlankQuizId()
                .sameValueAs(blankQuizId)).findFirst().get();
+    }
+
+    @Override
+    public BlankQuiz save(BlankQuiz blankQuiz) {
+        blankQuizSet.add(blankQuiz);
+        return blankQuiz;
     }
 }

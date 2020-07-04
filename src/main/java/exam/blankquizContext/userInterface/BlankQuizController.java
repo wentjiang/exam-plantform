@@ -4,6 +4,7 @@ import exam.blankquizContext.application.BlankQuizApplicationService;
 import exam.blankquizContext.application.CreateBlankQuizCommand;
 import exam.blankquizContext.application.UpdateBlankQuizCommand;
 import exam.blankquizContext.domain.model.blankquiz.BlankQuiz;
+import exam.blankquizContext.domain.model.blankquiz.BlankQuizId;
 import exam.blankquizContext.domain.model.blankquiz.BlankQuizRepository;
 import exam.paperContext.application.AssemblePaperCommand;
 import exam.paperContext.domain.model.paper.PaperId;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/blankQuizzes")
 public class BlankQuizController {
 
     private BlankQuizApplicationService blankQuizApplicationService;
@@ -23,7 +25,7 @@ public class BlankQuizController {
     /**
      * 添加填空题
      */
-    @PostMapping("/BlankQuiz")
+    @PostMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     BlankQuizDTO create(@RequestBody CreateBlankQuizCommand command) {
@@ -33,17 +35,19 @@ public class BlankQuizController {
     /**
      * 修改填空题
      */
-    @PutMapping("/BlankQuiz")
+    @PutMapping("/{blankQuizId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
-    BlankQuizDTO update(@RequestBody UpdateBlankQuizCommand command) {
-        return blankQuizApplicationService.updateBlankQuiz(command);
+    BlankQuizDTO revise(@RequestBody UpdateBlankQuizCommand command,
+                        @PathVariable String blankQuizId) {
+        BlankQuizId id = new BlankQuizId(blankQuizId);
+        return blankQuizApplicationService.reviseBlankQuiz(command,id);
     }
 
     /**
      * 删除填空题
      */
-    @DeleteMapping("BlankQuiz/{blankQuizId}")
+    @DeleteMapping("/{blankQuizId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     void delete(@PathVariable String blankQuizId){
@@ -53,7 +57,7 @@ public class BlankQuizController {
     /**
      * 获取所有
      */
-    @GetMapping("BlankQuizes")
+    @GetMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     List<BlankQuizDTO> getAll(){
@@ -63,7 +67,7 @@ public class BlankQuizController {
     /**
      * 获取单个
      */
-    @GetMapping("BlankQuiz/{blankQuizId}")
+    @GetMapping("/{blankQuizId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     BlankQuizDTO get(@PathVariable String blankQuizId){
